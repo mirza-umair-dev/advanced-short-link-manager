@@ -1,10 +1,11 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 import crypto from "crypto";
 import transporter from "../utils/nodemailer.js";
-import dotenv from 'dotenv';
-dotenv.config();
+
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;

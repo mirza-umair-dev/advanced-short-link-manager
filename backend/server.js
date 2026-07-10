@@ -1,9 +1,10 @@
 import dotenv from 'dotenv'
+dotenv.config();
 import express from 'express'
 import connectDb from './Config/db.js';
 import authroutes from './routes/authroutes.js'
 import cookiparser from 'cookie-parser'
-dotenv.config();
+
 const app = express();
 app.use(cookiparser());
 app.use(express.json());
