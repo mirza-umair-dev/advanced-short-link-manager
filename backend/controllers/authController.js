@@ -4,7 +4,8 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 import crypto from "crypto";
-import transporter from "../utils/nodemailer.js";
+import { sendEmail,transporter } from "../utils/nodemailer.js";
+import { otpTemplate } from '../templates/otptemplate.js';
 
 
 const registerUser = async (req, res) => {
@@ -31,6 +32,7 @@ const registerUser = async (req, res) => {
     });
 
     const token = await generateToken(user.id);
+
     const sendOtp = async (user) => {
       const otp = Math.floor(1000 + Math.random() * 9000);
       const verfiyOtp_ExpiredAt = Date.now() + 20 * 60 * 1000;
@@ -41,19 +43,11 @@ const registerUser = async (req, res) => {
     };
     const otp = await sendOtp(user);
 
-    const mailOptons = {
-      from: process.env.SENDER_EMAIL,
-      to: email,
-      subject: "Verify Your Account",
-      text: `Hello, your OTP is ${otp}. It will expire in 20 mins.`,
-    };
-
-    try {
-    const info = await transporter.sendMail(mailOptons);
-    console.log(info);
-} catch(err){
-    console.log(err);
-}
+    await sendEmail(
+    user.email,
+    "Verify Your Email",
+    otpTemplate(otp)
+);
     res.cookie("token", token, {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
@@ -120,11 +114,44 @@ const getmyProfile = async (req, res) => {
   return res.status(200).json({ user });
 };
 
+const sendVerifyOtp = async (req,res) => {
+    const user = req.user;
+    const {email} =req.body;
+   
+    try {
+        const sendOtp = async (user) => {
+      const otp = Math.floor(1000 + Math.random() * 9000);
+      const verfiyOtp_ExpiredAt = Date.now() + 20 * 60 * 1000;
+      user.verifyOtp = otp;
+      user.verfiyOtp_ExpiredAt = verfiyOtp_ExpiredAt;
+      await user.save();
+      return otp;
+    };
+    const otp = await sendOtp(user);
+
+    const mailOptons = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Verify Your Account",
+      text: `Hello, your OTP is ${otp}. It will expire in 20 mins.`,
+    };
+
+    await transporter.sendMail(mailOptons);
+    return res.status(200).json({success:true,message:'Otp Sent Successfully!'})
+        
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Internal server error!" });
+    }
+
+   
+}
+
 const verifyOtp = async (req, res) => {
   const user = req.user;
-  const { otp } = req.body;
+  const otp = Number(req.body.otp);
 
   try {
+    console.log(user)
     if (!otp) {
       return res
         .status(400)
@@ -217,29 +244,7 @@ const verifyToken = async (req, res) => {
 };
 
 
-const sendOtpMail = async (req,res) => {
-    const {email} = req.body;
-    const user = User.findOne({email});
-    try {
-        const sendOtp = async (user) => {
-      const otp = Math.floor(1000 + Math.random() * 9000);
-      const verfiyOtp_ExpiredAt = Date.now() + 20 * 60 * 1000;
-      user.verifyOtp = otp;
-      user.verfiyOtp_ExpiredAt = verfiyOtp_ExpiredAt;
-      await user.save();
-      return otp;
-    };
-    const otp = await sendOtp(user);
 
-    const mailOptons = {
-      from: process.env.SENDER_EMAIL,
-      to: email,
-      subject: "Verify Your Account",
-      text: `Hello, your OTP is ${otp}. It will expire in 20 mins.`,
-    };
-    } catch (error) {
-        res.status(500).json(error)
-    }
-}
 
-export { registerUser, signinUser, getmyProfile,resetPassword,verifyToken,sendOtpMail };
+
+export { registerUser, signinUser, getmyProfile,resetPassword,verifyToken,sendVerifyOtp,verifyOtp};

@@ -1,13 +1,26 @@
-import nodemailer from 'nodemailer';
-
+import nodemailer from "nodemailer";
+import dotenv from 'dotenv';
+dotenv.config();
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_SERVER,
-  port: process.env.SMTP_PORT,
-  secure: false,
+  host: 'smtp-relay.brevo.com',
+  port: 587,
   auth: {
     user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD,
+    pass:process.env.SMTP_PASSWORD ,
   },
 });
-
-export default transporter;
+const sendEmail = async (email, subject, html) => {
+  try {
+  await transporter.verify();
+  console.log("SMTP connection successful");
+} catch (err) {
+  console.error("SMTP verify failed:", err);
+}
+  await transporter.sendMail({
+    from: process.env.SENDER_EMAIL,
+    to: email,
+    subject,
+    html,
+  });
+};
+export { transporter, sendEmail };
