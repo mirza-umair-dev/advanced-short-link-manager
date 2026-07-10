@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     isVerified:{type:Boolean,default:false},
     verifyOtp:{type:Number},
     verfiyOtp_ExpiredAt:{type:Date},
-    resetPassword_Token:{type:Number},
+    resetPassword_Token:{type:String},
     resetPassword_Token_ExpiredAt:{type:Date}
 },{
     timestamps:true

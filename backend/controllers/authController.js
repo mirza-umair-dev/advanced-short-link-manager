@@ -1,12 +1,11 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 import crypto from "crypto";
-import { sendEmail,transporter } from "../utils/nodemailer.js";
-import { otpTemplate } from '../templates/otptemplate.js';
-
+import { sendEmail, transporter } from "../utils/nodemailer.js";
+import { otpTemplate } from "../templates/otptemplate.js";
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -43,11 +42,7 @@ const registerUser = async (req, res) => {
     };
     const otp = await sendOtp(user);
 
-    await sendEmail(
-    user.email,
-    "Verify Your Email",
-    otpTemplate(otp)
-);
+    await sendEmail(user.email, "Verify Your Email", otpTemplate(otp));
     res.cookie("token", token, {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
@@ -61,7 +56,7 @@ const registerUser = async (req, res) => {
       id: user._id,
     });
   } catch (error) {
-   return res
+    return res
       .status(400)
       .json({ success: false, message: "Internal server error", error });
   }
@@ -114,12 +109,12 @@ const getmyProfile = async (req, res) => {
   return res.status(200).json({ user });
 };
 
-const sendVerifyOtp = async (req,res) => {
-    const user = req.user;
-    const {email} =req.body;
-   
-    try {
-        const sendOtp = async (user) => {
+const sendVerifyOtp = async (req, res) => {
+  const user = req.user;
+  const { email } = req.body;
+
+  try {
+    const sendOtp = async (user) => {
       const otp = Math.floor(1000 + Math.random() * 9000);
       const verfiyOtp_ExpiredAt = Date.now() + 20 * 60 * 1000;
       user.verifyOtp = otp;
@@ -137,21 +132,22 @@ const sendVerifyOtp = async (req,res) => {
     };
 
     await transporter.sendMail(mailOptons);
-    return res.status(200).json({success:true,message:'Otp Sent Successfully!'})
-        
-    } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal server error!" });
-    }
-
-   
-}
+    return res
+      .status(200)
+      .json({ success: true, message: "Otp Sent Successfully!" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error!" });
+  }
+};
 
 const verifyOtp = async (req, res) => {
   const user = req.user;
   const otp = Number(req.body.otp);
 
   try {
-    console.log(user)
+    console.log(user);
     if (!otp) {
       return res
         .status(400)
@@ -181,70 +177,91 @@ const verifyOtp = async (req, res) => {
   }
 };
 
-const resetPassword = async (req, res) => {
+const resetPasswordToken = async (req, res) => {
   const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(404).json({ success: false, message: "User not found" });
-  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
 
-  const token = crypto.randomBytes(32).toString("hex");
-  user.resetPassword_Token = token;
-  user.resetPassword_Token_ExpiredAt = Date.now() + 20 * 60 * 1000;
-  await user.save();
-  const resetPasswordLink = `CLIENT_URL/reset-Password/${token}`;
+    const token = crypto.randomBytes(32).toString("hex");
+    user.resetPassword_Token = token;
+    user.resetPassword_Token_ExpiredAt = Date.now() + 20 * 60 * 1000;
+    await user.save();
+    const resetPasswordLink = `${process.env.CLIENT_URL}/api/auth/reset-password/${token}`;
 
-  await transporter.sendMail({
-    from: process.env.SENDER_EMAIL,
-    to: user.email,
-    subject: "Reset Password",
-    html: `
+    await transporter.sendMail({
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Reset Password",
+      html: `
         <h2>Password Reset</h2>
 
         <p>Click the link below:</p>
 
-        <a href="${resetLink}">
+        <a href="${resetPasswordLink}">
             Reset Password
         </a>
     `,
-  });
+    });
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Reset Link sent Successfully!" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server Error!" });
+  }
 };
 
-const verifyToken = async (req, res) => {
+const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
   try {
     const user = await User.findOne({
       resetPassword_Token: token,
     });
-
+    console.log(user);
     if (!user) {
       return res.status(400).json({
         success: false,
         message: "Invalid token",
       });
     }
+    
     if (user.resetPassword_Token_ExpiredAt < Date.now()) {
       return res.status(400).json({
         success: false,
         message: "Token expired",
       });
     }
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
+    user.resetPassword_Token=null;
+    user.resetPassword_Token_ExpiredAt=null;
     await user.save();
 
-    res.status(200).json({success:true,message:'Password Successfully changed!'})
+    res
+      .status(200)
+      .json({ success: true, message: "Password Successfully changed!" });
   } catch (error) {
-     return res.status(500).json({
-            success: false,
-            message: error.message
-        });
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
-
-
-
-
-export { registerUser, signinUser, getmyProfile,resetPassword,verifyToken,sendVerifyOtp,verifyOtp};
+export {
+  registerUser,
+  signinUser,
+  getmyProfile,
+  resetPasswordToken,
+  resetPassword,
+  sendVerifyOtp,
+  verifyOtp,
+};
