@@ -1,28 +1,19 @@
 import mongoose from "mongoose";
 
 const clicktrackSchema = new mongoose.Schema({
-    shortLinkId: {
+    link: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ShortLink',
+        ref: 'Link',
         required: true,
         index: true 
     },
-    
-   
-    clickedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        default: null
-    },
 
-   
     location: {
         country: { type: String, default: "Unknown" },
         city: { type: String, default: "Unknown" },
         region: { type: String, default: "Unknown" }
     },
 
-    
     device: {
         browser: { type: String, default: "Unknown" },
         os: { type: String, default: "Unknown" },      
