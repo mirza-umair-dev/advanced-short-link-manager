@@ -1,9 +1,9 @@
 import Link from "../models/Link.js";
-import ClickTrack from "../models/Clicktrack.js";
+import ClickTrack from "../models/ClickAnalysis.js";
 import { UAParser } from "ua-parser-js";
 import geoip from "geoip-lite";
 
-const getAnalytics = async (req, res) => {
+const getLinkandAnlytics = async (req, res) => {
   const { shortId } = req.params;
 
   try {
@@ -58,4 +58,4 @@ const getAnalytics = async (req, res) => {
   }
 };
 
-export default getAnalytics;
+export default getLinkandAnlytics;

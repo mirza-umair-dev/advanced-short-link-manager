@@ -31,5 +31,5 @@ const clicktrackSchema = new mongoose.Schema({
     timestamps: true 
 });
 
-const ClickTrack = mongoose.model('ClickTrack', clicktrackSchema);
-export default ClickTrack;
+const ClickAnalysis = mongoose.model('ClickTrack', clicktrackSchema);
+export default ClickAnalysis;
