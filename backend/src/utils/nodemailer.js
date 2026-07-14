@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport({
 const sendEmail = async (email, subject, html) => {
   try {
   await transporter.verify();
-  console.log("SMTP connection successful");
 } catch (err) {
   console.error("SMTP verify failed:", err);
 }
