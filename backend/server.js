@@ -1,14 +1,17 @@
 import dotenv from 'dotenv'
 dotenv.config();
 import express from 'express'
+import cookiparser from 'cookie-parser'
+import cors from 'cors'
 import connectDb from './src/Config/db.js';
 import authroutes from './src/routes/authroutes.js'
 import linkroutes from './src/routes/linkroutes.js'
-import cookiparser from 'cookie-parser'
+
 
 const app = express();
 app.use(cookiparser());
 app.use(express.json());
+app.use(cors)
 
 connectDb();
 app.get('/',(req,res)=> {

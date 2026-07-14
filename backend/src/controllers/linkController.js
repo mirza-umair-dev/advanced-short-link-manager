@@ -45,29 +45,6 @@ const generateLink = async (req, res) => {
   }
 };
 
-const getLink = async (req, res) => {
-  const { shortId } = req.params;
-
-  if (!shortId) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Short Link not found" });
-  }
-  try {
-    const link = await Link.findOne({ shortId });
-    if (!link) {
-      return res.status(404).json({ success: false, message: "No link Found" });
-    }
-    link.clicks++;
-    await link.save();
-    return res.redirect(link.originalLink);
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal sever error!" });
-  }
-};
-
 const deleteLink = async (req,res) => {
   const {shortId} = req.params;
   if (!shortId) {
@@ -125,7 +102,6 @@ const getLinkandAnlytics = async (req, res) => {
 
 
     const geo = geoip.lookup(ipAddress);
-    console.log(geo);
     await ClickTrack.create({
       link: link._id,
       ipAddress,
@@ -148,8 +124,6 @@ const getLinkandAnlytics = async (req, res) => {
 
     return res.redirect(link.originalLink);
   } catch (error) {
-    console.error(error);
-
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
@@ -255,8 +229,8 @@ const getDashboardData = async (req, res) => {
       devices,
     });
   } catch (error) {
-    return res.json(error);
+    return res.status(500).json({success:false,message:'Internal Server error!'});
   }
 };
 
-export { generateLink, getLink,deleteLink,getLinkandAnlytics,getDashboardData };
+export { generateLink,deleteLink,getLinkandAnlytics,getDashboardData };

@@ -58,7 +58,9 @@ const adminDashboardData = async (req, res) => {
     return res.status(200).json({
       latestLinks,
       totalLinks,
-      uniqueVisitors,
+      totalClicks,
+      totalUsers,
+      uniqueVisitors:uniqueVisitors.length,
       countries,
       operatingSystems,
       browsers,

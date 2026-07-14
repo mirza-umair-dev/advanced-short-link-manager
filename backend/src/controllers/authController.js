@@ -147,7 +147,6 @@ const verifyOtp = async (req, res) => {
   const otp = Number(req.body.otp);
 
   try {
-    console.log(user);
     if (!otp) {
       return res
         .status(400)
@@ -225,7 +224,7 @@ const resetPassword = async (req, res) => {
     const user = await User.findOne({
       resetPassword_Token: token,
     });
-    console.log(user);
+    
     if (!user) {
       return res.status(400).json({
         success: false,
