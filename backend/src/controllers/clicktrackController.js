@@ -1,5 +1,5 @@
 import Link from "../models/Link.js";
-import ClickTrack from "../models/ClickTrack.js";
+import ClickTrack from "../models/Clicktrack.js";
 import { UAParser } from "ua-parser-js";
 import geoip from "geoip-lite";
 
