@@ -3,6 +3,7 @@ dotenv.config();
 import express from 'express'
 import cookiparser from 'cookie-parser'
 import cors from 'cors'
+import helmet from 'helmet'
 import connectDb from './src/Config/db.js';
 import authroutes from './src/routes/authroutes.js'
 import linkroutes from './src/routes/linkroutes.js'
@@ -11,7 +12,8 @@ import linkroutes from './src/routes/linkroutes.js'
 const app = express();
 app.use(cookiparser());
 app.use(express.json());
-app.use(cors)
+app.use(helmet());
+app.use(cors());
 
 connectDb();
 app.get('/',(req,res)=> {
