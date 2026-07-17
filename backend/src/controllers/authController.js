@@ -180,7 +180,7 @@ const resetPasswordToken = async (req, res) => {
     user.resetPassword_Token = token;
     user.resetPassword_Token_ExpiredAt = Date.now() + 20 * 60 * 1000;
     await user.save();
-    const resetPasswordLink = `${process.env.CLIENT_URL}/api/auth/reset-password/${token}`;
+    const resetPasswordLink = `${process.env.CLIENT_URI}/api/auth/reset-password/${token}`;
 
     await transporter.sendMail({
       from: process.env.SENDER_EMAIL,

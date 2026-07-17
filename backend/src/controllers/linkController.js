@@ -219,7 +219,7 @@ const getDashboardData = async (req, res) => {
     return res.status(200).json({
       latestLinks,
       totalLinks,
-      uniqueVisitors,
+      uniqueVisitors:uniqueVisitors.length,
       countries,
       operatingSystems,
       referrers,
