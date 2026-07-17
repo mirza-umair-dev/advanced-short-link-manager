@@ -7,7 +7,7 @@ import ClickAnalysis from "../models/ClickAnalysis.js";
 
 const generateLink = async (req, res) => {
   const { originalLink } = req.body;
-  const clientUrl = process.env.CLIENT_URL;
+  const clientUrl = process.env.CLIENT_URI;
   
 
   try {
