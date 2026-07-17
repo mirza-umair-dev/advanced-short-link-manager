@@ -1,19 +1,13 @@
 import dotenv from "dotenv";
-dotenv.config();
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 import crypto from "crypto";
 import { sendEmail, transporter } from "../utils/nodemailer.js";
 import { otpTemplate } from "../templates/otptemplate.js";
-
+dotenv.config();
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Please fill all the fields" });
-  }
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
@@ -64,11 +58,7 @@ const registerUser = async (req, res) => {
 
 const signinUser = async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Please fill all the fields" });
-  }
+ 
 
   try {
     const user = await User.findOne({ email });

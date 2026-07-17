@@ -8,9 +8,7 @@ import ClickAnalysis from "../models/ClickAnalysis.js";
 const generateLink = async (req, res) => {
   const { originalLink } = req.body;
   const clientUrl = process.env.CLIENT_URL;
-  if (!originalLink) {
-    return res.status(404).json({ success: false, message: "Paste the link!" });
-  }
+  
 
   try {
     const existingLink = await Link.findOne({ originalLink,createdBy: req.user._id });
