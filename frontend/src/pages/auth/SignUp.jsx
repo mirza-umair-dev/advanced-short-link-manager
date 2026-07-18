@@ -1,86 +1,69 @@
-import { useState } from "react"
-import Input from "../../components/Input"
-import AuthLayout from "../../layouts/AuthLayout"
+import { useState } from "react";
+import Input from "../../components/Input";
+import AuthLayout from "../../layouts/AuthLayout";
 import Button from "../../components/Button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema } from "../../validations/authSchema.js";
 
 const SignUp = () => {
-    const [formData, setformData] = useState({
-        name:'',
-        email:'',
-        password:''
-    });
-    const [error, seterror] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
 
+  const submitHandler = async (data) => {
+    console.log(data);
+  };
+  return (
+    <AuthLayout
+      message="Get Started"
+      title="Create your account"
+      subtitle="Start shortening links in seconds — no card required."
+    >
+      <form className="mt-6" onSubmit={handleSubmit(submitHandler)}>
+        <Input
+          htmlFor="name"
+          id="name"
+          type="text"
+          placeholder="Enter Name"
+          error={errors.name?.message}
+          {...register("name")}
+          label="Full Name"
+        />
+        <Input
+          htmlFor="email"
+          id="email"
+          type="text"
+          placeholder="mirza@gmail.com"
+          error={errors.email?.message}
+          {...register('email')}
+          label="Email Address"
+        />
+        <Input
+          htmlFor="password"
+          id="password"
+          type="password"
+          placeholder="Create a password"
+          error = {errors.password?.message}
+          {...register('password')}
+          label="Password"
+        />
 
-    const changeHandler = (e) => {
-        setformData({
-            ...formData,
-            [e.target.name] : e.target.value
-        })
-        if(error) seterror('');
-    }
+        
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        if(!formData.name || !formData.email || !formData.password){
-        seterror('All fields are required!');
-        return;
-        }
-        if(formData.password.length<8){
-            seterror('Password must be 8 characters!');
-            return;
-        }
-        console.log(formData);
-        seterror('');
-        return
-    }
-    return (
-        <AuthLayout
-        message='Get Started'
-        title='Create your account'
-        subtitle='Start shortening links in seconds — no card required.' 
-        >
-            <form className="mt-6" onSubmit={submitHandler}>
-                <Input 
-                htmlFor='name'
-                id='name'
-                type='text'
-                placeholder='Enter Name'
-                value={formData.name}
-                onChange={changeHandler}
-                name='name'
-                label='Full Name'
-                />
-                <Input 
-                htmlFor='email'
-                id='email'
-                type='text'
-                placeholder='mirza@gmail.com'
-                value={formData.email}
-                onChange={changeHandler}
-                name='email'
-                label='Email Address'
-                />
-                <Input 
-                htmlFor='password'
-                id='password'
-                type='password'
-                placeholder='Create a password'
-                value={formData.password}
-                onChange={changeHandler}
-                name='password'
-                label='Password'
-                />
+        <Button  value={isSubmitting ? "Creating..." : "Create Account"} />
+      </form>
+    </AuthLayout>
+  );
+};
 
-                {error && <p className="mt-6 text-red-400">
-                    {error}
-                </p>}
-
-                <Button value='Create account' />
-            </form>
-
-        </AuthLayout>
-    )
-}
-
-export default SignUp
+export default SignUp;
