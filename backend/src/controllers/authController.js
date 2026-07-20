@@ -36,7 +36,7 @@ const registerUser = async (req, res) => {
     };
     const otp = await sendOtp(user);
 
-    await sendEmail(user.email, "Verify Your Email", otpTemplate(otp));
+    sendEmail(user.email, "Verify Your Email", otpTemplate(otp));
     res.cookie("token", token, {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
@@ -58,7 +58,6 @@ const registerUser = async (req, res) => {
 
 const signinUser = async (req, res) => {
   const { email, password } = req.body;
- 
 
   try {
     const user = await User.findOne({ email });
@@ -101,7 +100,6 @@ const getmyProfile = async (req, res) => {
 
 const sendVerifyOtp = async (req, res) => {
   const user = req.user;
-  const { email } = req.body;
 
   try {
     const sendOtp = async (user) => {
@@ -114,14 +112,7 @@ const sendVerifyOtp = async (req, res) => {
     };
     const otp = await sendOtp(user);
 
-    const mailOptons = {
-      from: process.env.SENDER_EMAIL,
-      to: email,
-      subject: "Verify Your Account",
-      text: `Hello, your OTP is ${otp}. It will expire in 20 mins.`,
-    };
-
-    await transporter.sendMail(mailOptons);
+    sendEmail(user.email, "Verify Your Email", otpTemplate(otp));
     return res
       .status(200)
       .json({ success: true, message: "Otp Sent Successfully!" });
@@ -180,7 +171,7 @@ const resetPasswordToken = async (req, res) => {
     user.resetPassword_Token = token;
     user.resetPassword_Token_ExpiredAt = Date.now() + 20 * 60 * 1000;
     await user.save();
-    const resetPasswordLink = `${process.env.CLIENT_URI}/api/auth/reset-password/${token}`;
+    const resetPasswordLink = `${process.env.CLIENT_URI}/reset-password/${token}`;
 
     await transporter.sendMail({
       from: process.env.SENDER_EMAIL,
@@ -214,14 +205,14 @@ const resetPassword = async (req, res) => {
     const user = await User.findOne({
       resetPassword_Token: token,
     });
-    
+
     if (!user) {
       return res.status(400).json({
         success: false,
         message: "Invalid token",
       });
     }
-    
+
     if (user.resetPassword_Token_ExpiredAt < Date.now()) {
       return res.status(400).json({
         success: false,
@@ -230,8 +221,8 @@ const resetPassword = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
-    user.resetPassword_Token=null;
-    user.resetPassword_Token_ExpiredAt=null;
+    user.resetPassword_Token = null;
+    user.resetPassword_Token_ExpiredAt = null;
     await user.save();
 
     res
@@ -246,23 +237,22 @@ const resetPassword = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-    try {
-        res.clearCookie("token", {
-            httpOnly: true,
-        });
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+    });
 
-        return res.status(200).json({
-            success: true,
-            message: "Logged out successfully"
-        });
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
-
 
 export {
   registerUser,
@@ -272,5 +262,5 @@ export {
   resetPassword,
   sendVerifyOtp,
   verifyOtp,
-  logoutUser
+  logoutUser,
 };

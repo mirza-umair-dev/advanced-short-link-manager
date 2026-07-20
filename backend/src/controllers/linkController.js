@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid";
 import Link from "../models/Link.js";
-import ClickTrack from "../models/ClickAnalysis.js";
 import { UAParser } from "ua-parser-js";
 import geoip from "geoip-lite";
 import ClickAnalysis from "../models/ClickAnalysis.js";
@@ -8,8 +7,6 @@ import ClickAnalysis from "../models/ClickAnalysis.js";
 const generateLink = async (req, res) => {
   const { originalLink } = req.body;
   const clientUrl = process.env.CLIENT_URI;
-  
-
   try {
     const existingLink = await Link.findOne({ originalLink,createdBy: req.user._id });
     if (existingLink) {
