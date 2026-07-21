@@ -8,12 +8,13 @@ import RequestResetPassword from './pages/auth/RequestResetPassword'
 import ResetPassword from './pages/auth/ResetPassword'
 import TokenSuccess from './pages/auth/TokenSuccess'
 import PasswordChangedSuccess from './pages/auth/PasswordChangedSuccess'
+import ProtectedRoute from './routes/ProtectedRoute'
 function App() {
 
   return (
     <div>
       <Routes >
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path='/auth/register' element={<SignUp />} />
         <Route path='/auth/login' element={<SignIn />} />
         <Route path='/authlayout' element={<AuthLayout />} />
