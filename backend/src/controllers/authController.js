@@ -1,7 +1,11 @@
 import dotenv from "dotenv";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-import generateToken from "../utils/generateToken.js";
+import jwt from 'jsonwebtoken';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/generateToken.js";
 import crypto from "crypto";
 import { sendEmail, transporter } from "../utils/nodemailer.js";
 import { otpTemplate } from "../templates/otptemplate.js";
@@ -24,8 +28,23 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = await generateToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+    const acessToken = generateAccessToken(user.id);
 
+    user.refreshToken = await bcrypt.hash(refreshToken, 10);
+    await user.save();
+    res.cookie("accessToken", acessToken, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookies("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
     const sendOtp = async (user) => {
       const otp = Math.floor(1000 + Math.random() * 9000);
       const verfiyOtp_ExpiredAt = Date.now() + 20 * 60 * 1000;
@@ -37,12 +56,7 @@ const registerUser = async (req, res) => {
     const otp = await sendOtp(user);
 
     sendEmail(user.email, "Verify Your Email", otpTemplate(otp));
-    res.cookie("token", token, {
-      httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
+
     return res.status(201).json({
       success: true,
       name: user.name,
@@ -72,12 +86,22 @@ const signinUser = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invalid Credentials!" });
     }
-    const token = await generateToken(user.id);
-    res.cookie("token", token, {
+    const refreshToken = await generateRefreshToken(user.id);
+    const acessToken = await generateAccessToken(user.id);
+
+    user.refreshToken = await bcrypt.hash(refreshToken, 10);
+    await user.save();
+    res.cookie("accessToken", acessToken, {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
       success: true,
@@ -86,6 +110,7 @@ const signinUser = async (req, res) => {
       id: user._id,
     });
   } catch (error) {
+    console.log(error);
     res
       .status(400)
       .json({ success: false, message: "Internal server error", error });
@@ -238,9 +263,13 @@ const resetPassword = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-    });
+    if (req.user) {
+      req.user.refreshToken = null;
+      await req.user.save();
+    }
+
+    res.clearCookie("accessToken", {});
+    res.clearCookie("refreshToken", {});
 
     return res.status(200).json({
       success: true,
@@ -254,6 +283,48 @@ const logoutUser = async (req, res) => {
   }
 };
 
+const refreshAccessToken = async (req, res) => {
+  const token = req.cookies.refreshToken;
+  if (!token) {
+    return res
+      .status(401)
+      .json({ success: false, message: "No refresh token" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user || !user.refreshToken) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid session" });
+    }
+
+    const isValid = await bcrypt.compare(token, user.refreshToken);
+    if (!isValid) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid session" });
+    }
+
+    const newAccessToken = generateAccessToken(user._id);
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+    return res.status(200).json({ success: true, message: "Token refreshed" });
+  } catch (error) {
+    return res
+      .status(401)
+      .json({
+        success: false,
+        message: "Refresh token expired, please log in again",
+      });
+  }
+};
+
 export {
   registerUser,
   signinUser,
@@ -263,4 +334,5 @@ export {
   sendVerifyOtp,
   verifyOtp,
   logoutUser,
+  refreshAccessToken,
 };

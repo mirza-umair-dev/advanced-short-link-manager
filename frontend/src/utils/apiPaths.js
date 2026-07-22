@@ -6,6 +6,7 @@ export const API_PATHS = {
     SIGN_UP: "/api/auth/register",
     SIGN_IN: "/api/auth/signin",
     SIGN_OUT: "/api/auth/logout",
+    REFRESH:  "/api/auth/refresh",
     VERIFY_OTP: "/api/auth/verifyotp",
     RESET_OTP: "/api/auth/reset-password-token",
     RESET_PASSWORD: "/api/auth/reset-password",

@@ -5,12 +5,11 @@ import { AuthContext } from "./authContext";
 
 const AuthProvider = ({children}) => {
     const [user, setuser] = useState('');
-    const [loading, setloading] = useState(false);
+    const [loading, setloading] = useState(true);
 
-    const checkAuth = async () => {
+    const getUser = async () => {
          try {
       const res = await instance.get(API_PATHS.AUTH.MY_PROFILE);
-
       setuser(res.data.user);
     } catch (error) {
       setuser(null);
@@ -21,14 +20,14 @@ const AuthProvider = ({children}) => {
   };
 
   useEffect(() => {
-    checkAuth();
+    getUser();
   }, [])
   
     return (
         <div>
             <AuthContext.Provider
             value={{
-                user,loading,setuser,checkAuth
+                user,loading,setuser,getUser
             }}
             >
                 {children}

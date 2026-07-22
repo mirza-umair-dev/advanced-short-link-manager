@@ -4,12 +4,15 @@ import Button from "../../components/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "../../api/authApi.js";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInSchema } from "../../validations/authSchema.js";
+import { AuthContext } from "../../context/authContext.js";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const { getUser } = useContext(AuthContext);
+
   const [submitError, setsubmitError] = useState("");
   const {
     register,
@@ -24,9 +27,11 @@ const SignIn = () => {
   });
 
   const submitHandler = async (data) => {
+
     try {
       await signIn(data);
       setsubmitError("");
+      await getUser();
       navigate("/");
       return;
     } catch (error) {
