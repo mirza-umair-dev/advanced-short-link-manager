@@ -1,6 +1,6 @@
 import express,{ Router } from "express";
 import { deleteLink, generateLink, getDashboardData, getLinkandAnlytics } from "../controllers/linkController.js";
-import protect from "../middlewares/authMiddleware.js";
+import {protect} from "../middlewares/authMiddleware.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import adminDashboardData from "../controllers/adminDashboardData.js";
 import validate from "../middlewares/validator.js";

@@ -28,8 +28,8 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    const refreshToken = generateRefreshToken(user.id);
-    const acessToken = generateAccessToken(user.id);
+    const refreshToken =await generateRefreshToken(user.id);
+    const acessToken = await generateAccessToken(user.id);
 
     user.refreshToken = await bcrypt.hash(refreshToken, 10);
     await user.save();
@@ -40,7 +40,7 @@ const registerUser = async (req, res) => {
       maxAge: 15 * 60 * 1000,
     });
 
-    res.cookies("refreshToken", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "strict",
       maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -66,7 +66,7 @@ const registerUser = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ success: false, message: "Internal server error", error });
+      .json({ success: false, message: "Internal server error"});
   }
 };
 
@@ -113,7 +113,7 @@ const signinUser = async (req, res) => {
     console.log(error);
     res
       .status(400)
-      .json({ success: false, message: "Internal server error", error });
+      .json({ success: false, message: "Internal server error"});
     return;
   }
 };
@@ -193,7 +193,8 @@ const resetPasswordToken = async (req, res) => {
     }
 
     const token = crypto.randomBytes(32).toString("hex");
-    user.resetPassword_Token = token;
+    const hashedResetPasswordToken = bcrypt.hash(token,10)
+    user.resetPassword_Token = hashedResetPasswordToken;
     user.resetPassword_Token_ExpiredAt = Date.now() + 20 * 60 * 1000;
     await user.save();
     const resetPasswordLink = `${process.env.CLIENT_URI}/reset-password/${token}`;
@@ -248,6 +249,13 @@ const resetPassword = async (req, res) => {
     user.password = hashedPassword;
     user.resetPassword_Token = null;
     user.resetPassword_Token_ExpiredAt = null;
+    res.clearCookie("accessToken", {});
+    res.clearCookie("refreshToken", {});
+
+    const refreshToken = await generateRefreshToken(user.id);
+    const acessToken = await generateAccessToken(user.id);
+
+    user.refreshToken = await bcrypt.hash(refreshToken, 10);
     await user.save();
 
     res
@@ -270,7 +278,7 @@ const logoutUser = async (req, res) => {
 
     res.clearCookie("accessToken", {});
     res.clearCookie("refreshToken", {});
-
+    
     return res.status(200).json({
       success: true,
       message: "Logged out successfully",

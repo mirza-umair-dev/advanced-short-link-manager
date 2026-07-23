@@ -68,12 +68,9 @@ const adminDashboardData = async (req, res) => {
       devices
     });
   } catch (error) {
-    console.error(error);
-
     return res.status(500).json({
         success: false,
-        message: error.message,
-        error
+        message:'Internal server error'
     });
 }
 };

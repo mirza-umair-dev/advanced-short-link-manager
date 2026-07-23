@@ -7,7 +7,7 @@ import helmet from "helmet";
 import connectDb from "./src/Config/db.js";
 import authroutes from "./src/routes/authroutes.js";
 import linkroutes from "./src/routes/linkroutes.js";
-import limiter from "./src/middlewares/limiter.js";
+import {limiter} from "./src/middlewares/limiter.js";
 
 const app = express();
 app.use(cookiparser());
@@ -20,7 +20,7 @@ app.use(
   }),
 );
 app.use(limiter);
-connectDb();
+await connectDb();
 app.get("/", (req, res) => {
   res.send("Hello");
 });

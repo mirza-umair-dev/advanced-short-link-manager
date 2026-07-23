@@ -1,7 +1,7 @@
 import { rateLimit } from 'express-rate-limit'
 
-const limiter = rateLimit({
-	windowMs:  15*60 * 1000, 
+export const limiter = rateLimit({
+	windowMs:  15*60*1000, 
 	limit: 100, 
 	standardHeaders: 'draft-8', 
 	legacyHeaders: false, 
@@ -10,4 +10,13 @@ const limiter = rateLimit({
     statusCode:429
 })
 
-export default limiter;
+export const authLimiter =rateLimit ({
+	windowMs:  15*60*1000, 
+	limit: 10, 
+	standardHeaders: 'draft-8', 
+	legacyHeaders: false, 
+	ipv6Subnet: 56, 
+    message:'Too many requests!',
+    statusCode:429
+})
+

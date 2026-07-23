@@ -19,6 +19,10 @@ const generateLink = async (req, res) => {
       });
     }
     const shortId = nanoid(6);
+    if(await Link.exists({shortId})){
+      shortId =nanoid(6);
+    }
+
     const link = await Link.create({
       originalLink,
       shortId,
@@ -97,7 +101,7 @@ const getLinkandAnlytics = async (req, res) => {
 
 
     const geo = geoip.lookup(ipAddress);
-    await ClickTrack.create({
+    await ClickAnalysis.create({
       link: link._id,
       ipAddress,
       location: {
