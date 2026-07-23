@@ -193,8 +193,7 @@ const resetPasswordToken = async (req, res) => {
     }
 
     const token = crypto.randomBytes(32).toString("hex");
-    const hashedResetPasswordToken = bcrypt.hash(token,10)
-    user.resetPassword_Token = hashedResetPasswordToken;
+    user.resetPassword_Token = token;
     user.resetPassword_Token_ExpiredAt = Date.now() + 20 * 60 * 1000;
     await user.save();
     const resetPasswordLink = `${process.env.CLIENT_URI}/reset-password/${token}`;
@@ -255,8 +254,22 @@ const resetPassword = async (req, res) => {
     const refreshToken = await generateRefreshToken(user.id);
     const acessToken = await generateAccessToken(user.id);
 
-    user.refreshToken = await bcrypt.hash(refreshToken, 10);
+    user.refreshToken = refreshToken;
     await user.save();
+  
+
+     res.cookie("accessToken", acessToken, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     res
       .status(200)

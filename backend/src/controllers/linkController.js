@@ -18,8 +18,8 @@ const generateLink = async (req, res) => {
         createdBy: req.user._id,
       });
     }
-    const shortId = nanoid(6);
-    if(await Link.exists({shortId})){
+    let shortId = nanoid(6);
+    while(await Link.exists({shortId})){
       shortId =nanoid(6);
     }
 
