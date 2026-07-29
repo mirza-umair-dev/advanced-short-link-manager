@@ -6,14 +6,14 @@ import ClickAnalysis from "../models/ClickAnalysis.js";
 
 const generateLink = async (req, res) => {
   const { originalLink } = req.body;
-  const clientUrl = process.env.CLIENT_URI;
+  const baseUrl = process.env.BASE_URI;
   try {
     const existingLink = await Link.findOne({ originalLink,createdBy: req.user._id });
     if (existingLink) {
       return res.status(200).json({
         originalLink: existingLink.originalLink,
         shortId: existingLink.shortId,
-        shortUrl: `${clientUrl}/${existingLink.shortId}`,
+        shortUrl: `${baseUrl}/${existingLink.shortId}`,
         clicks: existingLink.clicks,
         createdBy: req.user._id,
       });
@@ -33,7 +33,7 @@ const generateLink = async (req, res) => {
       success: true,
       originalLink: link.originalLink,
       shortId: link.shortId,
-      shortUrl: `${clientUrl}/${link.shortId}`,
+      shortUrl: `${baseUrl}/${link.shortId}`,
       clicks: link.clicks,
       createdBy: link.createdBy,
     });
@@ -141,7 +141,26 @@ const getDashboardData = async (req, res) => {
       .limit(5);
 
     const LinkIds = links.map((item) => item._id);
+const totalClicksResult = await Link.aggregate([
+  {
+    $match: {
+      createdBy: req.user._id,
+    },
+  },
+  {
+    $group: {
+      _id: null,
+      totalClicks: { $sum: "$clicks" },
+    },
+  },
+]);
 
+const totalClicks = totalClicksResult[0]?.totalClicks || 0;
+
+const averageClicks =
+  totalLinks > 0
+    ? Number((totalClicks / totalLinks))
+    : 0;
     const browsers = await ClickAnalysis.aggregate([
       {
         $match: {
@@ -219,6 +238,8 @@ const getDashboardData = async (req, res) => {
 
     return res.status(200).json({
       latestLinks,
+      totalClicks,
+      averageClicks,
       totalLinks,
       uniqueVisitors:uniqueVisitors.length,
       countries,

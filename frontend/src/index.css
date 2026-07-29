@@ -10,9 +10,11 @@
     --surface-color:#171A20;
     --textlight-color:#8B909C;
     --accent-color:#FFB86B;
+    --accentdim-color:rgba(255,184,107,0.14);
     --accent2-color:#7C6FFF;
     --accent2h-color:#6153fa;
     --border-color:rgba(255,255,255,0.08);
+    --glasss-color:rgba(255,255,255,0.03);
 
 }
 
@@ -23,8 +25,10 @@
     --color-bd: var(--border-color);
     --color-lightext:var(--textlight-color);
     --color-accent:var(--accent-color);
+    --color-accentdim:var(--accentdim-color);
     --color-accent2:var(--accent2-color);
-    --color-accent2h:var(--accent2h-color);
+    --color-accent2dim:var(--accent2h-color);
+    --color-glasss:var(--glasss-color);
     --color-surface: var(--surface-color);
     --font-space:"Space Grotesk", sans-serif;
     --font-Inter:'Inter', sans-serif;

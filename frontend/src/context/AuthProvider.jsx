@@ -19,6 +19,11 @@ const AuthProvider = ({children}) => {
     }
   };
 
+  const logout = async () => {
+    await instance.post(API_PATHS.AUTH.SIGN_OUT);
+    setuser(null);
+  }
+
   useEffect(() => {
     getUser();
   }, [])
@@ -27,7 +32,7 @@ const AuthProvider = ({children}) => {
         <div>
             <AuthContext.Provider
             value={{
-                user,loading,setuser,getUser
+                user,loading,setuser,getUser,logout
             }}
             >
                 {children}

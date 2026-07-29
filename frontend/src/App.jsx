@@ -1,7 +1,6 @@
 import {Routes,Route} from 'react-router-dom'
 import SignUp from './pages/auth/SignUp'
 import SignIn from './pages/auth/SignIn'
-import Home from './pages/Home'
 import AuthLayout from './layouts/AuthLayout'
 import VerifyOtp from './pages/auth/VerifyOtp'
 import RequestResetPassword from './pages/auth/RequestResetPassword'
@@ -9,12 +8,13 @@ import ResetPassword from './pages/auth/ResetPassword'
 import TokenSuccess from './pages/auth/TokenSuccess'
 import PasswordChangedSuccess from './pages/auth/PasswordChangedSuccess'
 import ProtectedRoute from './routes/ProtectedRoute'
+import UserDashboard from './pages/UserDashboard'
 function App() {
 
   return (
     <div>
       <Routes >
-        <Route path='/' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path='/' element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
         <Route path='/auth/register' element={<SignUp />} />
         <Route path='/auth/login' element={<SignIn />} />
         <Route path='/authlayout' element={<AuthLayout />} />

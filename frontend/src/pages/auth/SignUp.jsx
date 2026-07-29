@@ -27,7 +27,6 @@ const SignUp = () => {
   const submitHandler = async (data) => {
     try {
     const res = await signUp(data);
-    console.log(res?.data);
     setsubmitError('');
     navigate('/auth/verify-otp')
     return res;

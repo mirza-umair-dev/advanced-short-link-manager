@@ -8,7 +8,7 @@ const Input = forwardRef(
     const [show, setshow] = useState(false);
     return (
         <div className="flex flex-col mt-4 font-Inter">
-            <label htmlFor={htmlFor} className="text-sm text-lightext">{label}</label>
+           {label ?  <label htmlFor={htmlFor} className="text-sm text-lightext">{label}</label>:<></>}
             {type=='password' ? 
             <div className="flex items-center justify-between mt-2  rounded-lg transition-all bg-surface border-bd border  focus-within:border-accent2 font-light font-sm">
                 <input type={show ? 'text' : 'password'} ref={ref} placeholder={placeholder} id={id} {...props}  className=" w-full h-full px-3 py-2 outline-0 " />

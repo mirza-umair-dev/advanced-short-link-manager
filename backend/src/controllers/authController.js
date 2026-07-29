@@ -10,6 +10,9 @@ import crypto from "crypto";
 import { sendEmail, transporter } from "../utils/nodemailer.js";
 import { otpTemplate } from "../templates/otptemplate.js";
 dotenv.config();
+
+//Registration Endpoint
+
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
   const existingUser = await User.findOne({ email });
@@ -70,6 +73,8 @@ const registerUser = async (req, res) => {
   }
 };
 
+//Sing In Endpoint
+
 const signinUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -118,10 +123,14 @@ const signinUser = async (req, res) => {
   }
 };
 
+//Get User Endpoint
+
 const getmyProfile = async (req, res) => {
   const user = req.user;
   return res.status(200).json({ user });
 };
+
+//Sending email verification otp Endpoint
 
 const sendVerifyOtp = async (req, res) => {
   const user = req.user;
@@ -147,6 +156,8 @@ const sendVerifyOtp = async (req, res) => {
       .json({ success: false, message: "Internal server error!" });
   }
 };
+
+//Verifying email otp Endpoint
 
 const verifyOtp = async (req, res) => {
   const user = req.user;
@@ -181,6 +192,8 @@ const verifyOtp = async (req, res) => {
     });
   }
 };
+
+//Sending reset password email with token Endpoint
 
 const resetPasswordToken = async (req, res) => {
   const { email } = req.body;
@@ -222,6 +235,8 @@ const resetPasswordToken = async (req, res) => {
       .json({ success: false, message: "Internal server Error!" });
   }
 };
+
+//After password reset token Changing Password Endpoint
 
 const resetPassword = async (req, res) => {
   const { token } = req.params;
@@ -282,6 +297,8 @@ const resetPassword = async (req, res) => {
   }
 };
 
+//Logout Endpoint
+
 const logoutUser = async (req, res) => {
   try {
     if (req.user) {
@@ -304,6 +321,8 @@ const logoutUser = async (req, res) => {
   }
 };
 
+//To Refresh/Renew Access Token Endpoint
+
 const refreshAccessToken = async (req, res) => {
   const token = req.cookies.refreshToken;
   if (!token) {
@@ -319,7 +338,7 @@ const refreshAccessToken = async (req, res) => {
     if (!user || !user.refreshToken) {
       return res
         .status(401)
-        .json({ success: false, message: "Invalid session" });
+        .json({ success: false, message: "No Token Found!" });
     }
 
     const isValid = await bcrypt.compare(token, user.refreshToken);
@@ -329,7 +348,7 @@ const refreshAccessToken = async (req, res) => {
         .json({ success: false, message: "Invalid session" });
     }
 
-    const newAccessToken = generateAccessToken(user._id);
+    const newAccessToken = await generateAccessToken(user._id);
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       sameSite: "strict",

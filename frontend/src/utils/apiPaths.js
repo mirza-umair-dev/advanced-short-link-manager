@@ -13,4 +13,11 @@ export const API_PATHS = {
     MY_PROFILE: "/api/auth/myprofile",
     SEND_VERIFY_OTP: "/api/auth/sendotp",
   },
+  LINK: {
+    GENERATE: "/api/link/generate-link",
+    GET_DATA: "/api/link/get-data",
+    ADMIN_DASHBOARD: "/admin/dashboard",
+    REDIRECT_OR_ANALYTICS: (shortId) => `/${shortId}`,
+    DELETE: (shortId) => `/${shortId}`,
+  },
 };

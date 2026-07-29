@@ -1,12 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Button from "../../components/Button";
 import { instance } from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import Timer from "../../components/Timer";
+import { AuthContext } from "../../context/authContext";
 
 const VerifyOtp = () => {
+
+  const {getUser} = useContext(AuthContext);
   const navigate = useNavigate();
   const inputRef = useRef([]);
   const [error, seterror] = useState("");
@@ -29,7 +32,9 @@ const VerifyOtp = () => {
     const otp = otpArray.join("");
     try {
       const res = await instance.post(API_PATHS.AUTH.VERIFY_OTP, { otp });
+
       if (res.data.success) {
+        await getUser();
         navigate("/");
       } else {
         seterror(res.data.message || "Invalid Otp!");
@@ -81,6 +86,8 @@ const VerifyOtp = () => {
           <Button />
         </div>
       </form>
+                  <div className="text-sm text-lightext mt-4 font-semibold"><span>Wrong email? </span><Link to='/auth/register' className="text-accent2">Go back</Link></div>
+
     </AuthLayout>
   );
 };
