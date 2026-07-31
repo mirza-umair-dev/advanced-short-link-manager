@@ -2,20 +2,14 @@ import {  BASE_URI } from "../utils/apiPaths";
 
 
 const UsersTable = ({links}) => {
-
- 
   const baseUrl = BASE_URI;
-
-  
-
   return (
     <div className="border border-bd bg-surface rounded-2xl">
       <div className="px-4 py-5 font-semibold border-b border-bd">
         <h2 className="text-lg">Recent links</h2>
       </div>
 
-      {links.length > 0 ? 
-      <table className="w-full table-fixed">
+      {links.length > 0 ? <table className="w-full table-fixed">
         <thead>
           <tr className="border-b border-bd uppercase text-lightext text-sm text-left ">
             <th className="py-3 px-4">Short Link</th>
@@ -41,7 +35,7 @@ const UsersTable = ({links}) => {
           ))}
         </tbody>
       </table>:
-      <div>
+      <div className="px-4 py-3">
         No Links found!
       </div> }
     </div>

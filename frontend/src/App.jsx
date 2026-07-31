@@ -9,6 +9,10 @@ import TokenSuccess from './pages/auth/TokenSuccess'
 import PasswordChangedSuccess from './pages/auth/PasswordChangedSuccess'
 import ProtectedRoute from './routes/ProtectedRoute'
 import UserDashboard from './pages/UserDashboard'
+import GenerateLink from './pages/GenerateLink'
+import { ToastContainer } from "react-toastify";
+import UserLayout from './layouts/UserLayout'
+
 function App() {
 
   return (
@@ -23,8 +27,10 @@ function App() {
         <Route path='/auth/request-reset-password' element={<RequestResetPassword />} />
         <Route path='/auth/token-sent' element={<TokenSuccess />} />
         <Route path='/auth/password-changed' element={<PasswordChangedSuccess />} />
-
+        <Route path='/generate-link' element={<GenerateLink />} />
+        <Route path='/layout' element={<UserLayout />} />
       </Routes>
+      <ToastContainer />
     </div>
   )
 }

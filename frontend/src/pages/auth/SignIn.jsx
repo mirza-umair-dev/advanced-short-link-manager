@@ -77,7 +77,9 @@ const SignIn = () => {
 
         {submitError && <p className="mt-4 text-red-400">{submitError}</p>}
 
-        <Button value={isSubmitting ? "Logging..." : "Login"} />
+       <div className="mt-2">
+         <Button value={isSubmitting ? "Logging..." : "Login"} />
+       </div>
       </form>
       <div className="text-sm text-lightext mt-4 font-semibold">
         <span>New to Link Manager? </span>
