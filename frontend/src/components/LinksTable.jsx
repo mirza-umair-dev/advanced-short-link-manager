@@ -13,7 +13,7 @@ function LinksTable({ links }) {
     console.log("Clicked", shortId);
     setselectedLink(shortId);
     setOpenModal(true);
-
+    
     console.log(selectedLink);
   };
 

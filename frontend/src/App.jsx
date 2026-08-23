@@ -7,12 +7,13 @@ import RequestResetPassword from './pages/auth/RequestResetPassword'
 import ResetPassword from './pages/auth/ResetPassword'
 import TokenSuccess from './pages/auth/TokenSuccess'
 import PasswordChangedSuccess from './pages/auth/PasswordChangedSuccess'
-import UserDashboard from './pages/UserDashboard'
 import GenerateLink from './pages/GenerateLink'
 import { ToastContainer } from "react-toastify";
 import UserLayout from './layouts/UserLayout'
 import Links from './pages/Links'
 import ProtectedRoute from './routes/ProtectedRoute'
+import UserAnalytics from './pages/user/UserAnalytics'
+import UserDashboard from './pages/user/UserDashboard'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <Route path='/auth/password-changed' element={<PasswordChangedSuccess />} />
         <Route path='/generate-link' element={<GenerateLink />} />
         <Route path='/links' element={<Links />} />
+        <Route path='/analytics' element={<UserAnalytics />} />
         <Route path='/layout' element={<UserLayout />} />
       </Routes>
       <ToastContainer />

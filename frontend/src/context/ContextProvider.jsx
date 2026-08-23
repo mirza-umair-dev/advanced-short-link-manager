@@ -43,7 +43,7 @@ const ContextProvider = ({children}) => {
 
       const getLinks = async () => {
         const res = await instance.get(API_PATHS.LINK.GET_LINKS);
-        setlinks(res.data);
+        setlinks(res.data.links);
     }
     const getDashboardData = async () => {
         const res = await instance.get(API_PATHS.LINK.GET_DATA); 

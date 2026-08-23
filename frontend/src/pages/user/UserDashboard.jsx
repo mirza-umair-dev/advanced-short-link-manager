@@ -1,11 +1,11 @@
 import { FaPlus } from "react-icons/fa6";
-import Searchbar from "../components/Searchbar";
-import AnalyticsCard from "../components/cards/AnalyticsCard";
-import UsersTable from "../components/LinksTable";
-import UseLinks from "../hooks/UseLinks";
+import Searchbar from "../../components/Searchbar";
+import AnalyticsCard from "../../components/cards/AnalyticsCard";
+import UsersTable from "../../components/LinksTable";
+import UseLinks from "../../hooks/UseLinks";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import UserLayout from "../layouts/UserLayout";
+import UserLayout from "../../layouts/UserLayout";
 
 const UserDashboard = () => {
   const { data } = UseLinks();
