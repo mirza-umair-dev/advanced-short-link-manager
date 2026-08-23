@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
-import { AuthContext } from "../context/authContext";
+import { AppContext } from "../context/ContextProvider";
 export const Navbar = () => {
-  const { user, logout} = useContext(AuthContext);
+  const { user, logout} = useContext(AppContext);
   const [showpop, setshowpop] = useState(false);
   return (
     <div className="sticky top-0 z-50 h-16 bg-surface border-b border-bd flex items-center justify-between px-10">

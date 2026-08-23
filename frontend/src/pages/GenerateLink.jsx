@@ -4,7 +4,7 @@ import { instance } from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 import { toast } from "react-toastify";
 import UserLayout from "../layouts/UserLayout";
-import UsersTable from "../components/UsersTable";
+import UsersTable from "../components/LinksTable";
 import UseLinks from "../hooks/UseLinks";
 
 const GenerateLink = () => {
@@ -41,10 +41,11 @@ const GenerateLink = () => {
             className="flex gap-4 py-6 flex-col"
             onSubmit={shortLink}
           >
-            <div className="flex gap-4 items-center">
+           <div className="flex">
+             <div className="flex gap-4 items-center px-3 py-2 rounded-lg transition-all bg-surface border-bd border outline-0 focus:border-accent2 font-light font-sm">
               <input type="text"
                 placeholder="Paste link here..."
-                className="px-3 py-2 rounded-lg transition-all bg-surface border-bd border outline-0 focus:border-accent2 font-light font-sm"
+                className="px-3 py-2 outline-0 border-0"
                 value={originalLink}
                 onChange={(e) => setoriginalLink(e.target.value)}
               />
@@ -54,6 +55,7 @@ const GenerateLink = () => {
                 disabled={loading}
               />
             </div>
+           </div>
             {error && <p>{error}</p>}
           </form>
 

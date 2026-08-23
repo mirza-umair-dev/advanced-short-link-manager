@@ -1,10 +1,10 @@
 import { useContext } from "react"
-import { AuthContext } from "../context/authContext"
 import { VscLoadingCompact } from "react-icons/vsc";
 import { Navigate } from 'react-router-dom';
+import { AppContext } from "../context/ContextProvider";
 
 const ProtectedRoute = ({children}) => {
-    const {user,loading} = useContext(AuthContext);
+    const {user,loading} = useContext(AppContext);
     if(loading) return (
      <div>
         <div className="animation-spin">

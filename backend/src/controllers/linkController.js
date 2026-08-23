@@ -8,7 +8,10 @@ const generateLink = async (req, res) => {
   const { originalLink } = req.body;
   const baseUrl = process.env.BASE_URI;
   try {
-    const existingLink = await Link.findOne({ originalLink,createdBy: req.user._id });
+    const existingLink = await Link.findOne({
+      originalLink,
+      createdBy: req.user._id,
+    });
     if (existingLink) {
       return res.status(200).json({
         originalLink: existingLink.originalLink,
@@ -19,8 +22,8 @@ const generateLink = async (req, res) => {
       });
     }
     let shortId = nanoid(6);
-    while(await Link.exists({shortId})){
-      shortId =nanoid(6);
+    while (await Link.exists({ shortId })) {
+      shortId = nanoid(6);
     }
 
     const link = await Link.create({
@@ -44,8 +47,8 @@ const generateLink = async (req, res) => {
   }
 };
 
-const deleteLink = async (req,res) => {
-  const {shortId} = req.params;
+const deleteLink = async (req, res) => {
+  const { shortId } = req.params;
   if (!shortId) {
     return res
       .status(404)
@@ -56,27 +59,29 @@ const deleteLink = async (req,res) => {
     if (!link) {
       return res.status(404).json({ success: false, message: "No link Found" });
     }
-    if(link.createdBy.toString() !== req.user._id.toString() && req.user.role !== "admin"){
-       return res.status(403).json({
-                success: false,
-                message: "Unauthorized"
-            });
+    if (
+      link.createdBy.toString() !== req.user._id.toString() &&
+      req.user.role !== "admin"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized",
+      });
     }
 
     await link.deleteOne();
-     return res.status(200).json({
-            success: true,
-            message: "Link deleted successfully"
-        });
+    return res.status(200).json({
+      success: true,
+      message: "Link deleted successfully",
+    });
   } catch (error) {
-     return res.status(500).json({
-            success: false,
-            message: "Internal Server Error",
-            error
-        });
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error,
+    });
   }
-
-}
+};
 
 const getLinkandAnlytics = async (req, res) => {
   const { shortId } = req.params;
@@ -90,7 +95,7 @@ const getLinkandAnlytics = async (req, res) => {
         message: "No link found!",
       });
     }
-     const ipAddress =
+    const ipAddress =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
       req.socket.remoteAddress ||
       req.ip;
@@ -98,7 +103,6 @@ const getLinkandAnlytics = async (req, res) => {
     const result = parser.getResult();
 
     const referrer = req.headers.referer || "Direct";
-
 
     const geo = geoip.lookup(ipAddress);
     await ClickAnalysis.create({
@@ -130,6 +134,22 @@ const getLinkandAnlytics = async (req, res) => {
   }
 };
 
+const getLinks = async (req, res) => {
+  const user = req.user;
+
+  try {
+    const links = await Link.find({ createdBy: req.user._id });
+    return res.status(200).json({
+      success:true,
+      links
+    })
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server error!" });
+  }
+};
+
 const getDashboardData = async (req, res) => {
   const user = req.user;
 
@@ -141,26 +161,23 @@ const getDashboardData = async (req, res) => {
       .limit(5);
 
     const LinkIds = links.map((item) => item._id);
-const totalClicksResult = await Link.aggregate([
-  {
-    $match: {
-      createdBy: req.user._id,
-    },
-  },
-  {
-    $group: {
-      _id: null,
-      totalClicks: { $sum: "$clicks" },
-    },
-  },
-]);
+    const totalClicksResult = await Link.aggregate([
+      {
+        $match: {
+          createdBy: req.user._id,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalClicks: { $sum: "$clicks" },
+        },
+      },
+    ]);
 
-const totalClicks = totalClicksResult[0]?.totalClicks || 0;
+    const totalClicks = totalClicksResult[0]?.totalClicks || 0;
 
-const averageClicks =
-  totalLinks > 0
-    ? Number((totalClicks / totalLinks))
-    : 0;
+    const averageClicks = totalLinks > 0 ? Number(totalClicks / totalLinks) : 0;
     const browsers = await ClickAnalysis.aggregate([
       {
         $match: {
@@ -241,7 +258,7 @@ const averageClicks =
       totalClicks,
       averageClicks,
       totalLinks,
-      uniqueVisitors:uniqueVisitors.length,
+      uniqueVisitors: uniqueVisitors.length,
       countries,
       operatingSystems,
       referrers,
@@ -249,8 +266,10 @@ const averageClicks =
       devices,
     });
   } catch (error) {
-    return res.status(500).json({success:false,message:'Internal Server error!'});
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server error!" });
   }
 };
 
-export { generateLink,deleteLink,getLinkandAnlytics,getDashboardData };
+export { generateLink, deleteLink,getLinks, getLinkandAnlytics, getDashboardData };

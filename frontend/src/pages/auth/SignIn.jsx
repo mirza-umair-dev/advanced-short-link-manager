@@ -7,11 +7,11 @@ import { signIn } from "../../api/authApi.js";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInSchema } from "../../validations/authSchema.js";
-import { AuthContext } from "../../context/authContext.js";
+import { AppContext } from "../../context/ContextProvider.jsx";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { getUser } = useContext(AuthContext);
+  const { getUser } = useContext(AppContext);
 
   const [submitError, setsubmitError] = useState("");
   const {

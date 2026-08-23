@@ -7,18 +7,20 @@ import RequestResetPassword from './pages/auth/RequestResetPassword'
 import ResetPassword from './pages/auth/ResetPassword'
 import TokenSuccess from './pages/auth/TokenSuccess'
 import PasswordChangedSuccess from './pages/auth/PasswordChangedSuccess'
-import ProtectedRoute from './routes/ProtectedRoute'
 import UserDashboard from './pages/UserDashboard'
 import GenerateLink from './pages/GenerateLink'
 import { ToastContainer } from "react-toastify";
 import UserLayout from './layouts/UserLayout'
+import Links from './pages/Links'
+import ProtectedRoute from './routes/ProtectedRoute'
 
 function App() {
 
   return (
     <div>
       <Routes >
-        <Route path='/' element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
+
+        <Route path='/' element={<ProtectedRoute ><UserDashboard /></ProtectedRoute>}/>
         <Route path='/auth/register' element={<SignUp />} />
         <Route path='/auth/login' element={<SignIn />} />
         <Route path='/authlayout' element={<AuthLayout />} />
@@ -28,6 +30,7 @@ function App() {
         <Route path='/auth/token-sent' element={<TokenSuccess />} />
         <Route path='/auth/password-changed' element={<PasswordChangedSuccess />} />
         <Route path='/generate-link' element={<GenerateLink />} />
+        <Route path='/links' element={<Links />} />
         <Route path='/layout' element={<UserLayout />} />
       </Routes>
       <ToastContainer />

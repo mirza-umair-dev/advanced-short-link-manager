@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <div>
+    
       <AuthContext.Provider
         value={{
           user,
@@ -51,7 +51,7 @@ const AuthProvider = ({ children }) => {
       >
         {children}
       </AuthContext.Provider>
-    </div>
+    
   );
 };
 
