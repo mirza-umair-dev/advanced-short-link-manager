@@ -1,5 +1,5 @@
 
-export const BASE_URI = 'https://advanced-short-link-manager-1.onrender.com'
+export const BASE_URI = 'https://short-47ak.onrender.com'
 
 export const API_PATHS = {
   AUTH: {
