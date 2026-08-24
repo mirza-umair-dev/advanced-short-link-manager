@@ -38,14 +38,14 @@ const registerUser = async (req, res) => {
     await user.save();
     res.cookie("accessToken", acessToken, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      // sameSite: "strict",
+       secure:true,
+       sameSite: "none",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      // sameSite: "strict",
+       sameSite: "none",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
     const sendOtp = async (user) => {
@@ -98,14 +98,14 @@ const signinUser = async (req, res) => {
     await user.save();
     res.cookie("accessToken", acessToken, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      // sameSite: "strict",
+       secure: true,
+       sameSite: "none",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      // sameSite: "strict",
+     sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -275,14 +275,14 @@ const resetPassword = async (req, res) => {
 
      res.cookie("accessToken", acessToken, {
       httpOnly: true,
-      // secure: process.env.NODE_ENV === "production",
-      // sameSite: "strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      // sameSite: "strict",
+       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -351,7 +351,7 @@ const refreshAccessToken = async (req, res) => {
     const newAccessToken = await generateAccessToken(user._id);
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      // sameSite: "strict",
+       sameSite: "none",
       maxAge: 15 * 60 * 1000,
     });
     return res.status(200).json({ success: true, message: "Token refreshed" });
