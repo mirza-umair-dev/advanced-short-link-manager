@@ -253,6 +253,57 @@ const getDashboardData = async (req, res) => {
       },
     });
 
+    const trafficData = await ClickAnalysis.aggregate([
+  {
+    $match: {
+      link: { $in: LinkIds },
+    },
+  },
+
+  {
+    $group: {
+      _id: {
+        year: { $year: "$createdAt" },
+        month: { $month: "$createdAt" },
+        day: { $dayOfMonth: "$createdAt" },
+      },
+
+      clicks: { $sum: 1 },
+
+      visitors: {
+        $addToSet: "$ipAddress",
+      },
+    },
+  },
+
+  {
+    $project: {
+      _id: 0,
+
+      date: {
+        $dateFromParts: {
+          year: "$_id.year",
+          month: "$_id.month",
+          day: "$_id.day",
+        },
+      },
+
+      clicks: 1,
+
+      visitors: {
+        $size: "$visitors",
+      },
+    },
+  },
+
+  {
+    $sort: {
+      date: 1,
+    },
+  },
+]);
+
+
     return res.status(200).json({
       latestLinks,
       totalClicks,
@@ -264,6 +315,7 @@ const getDashboardData = async (req, res) => {
       referrers,
       browsers,
       devices,
+      trafficData
     });
   } catch (error) {
     return res
