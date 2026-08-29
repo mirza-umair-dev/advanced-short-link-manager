@@ -14,7 +14,7 @@ const COLORS = [ "#82ca9d",
   "#00c49f",
   "#0088fe"];
 
-const BrowserChart = ({ data }) => {
+const DeviceChart = ({ data }) => {
   return (
     <div className="w-full h-88">
       <ResponsiveContainer width="100%" height="100%">
@@ -44,4 +44,4 @@ const BrowserChart = ({ data }) => {
   );
 };
 
-export default BrowserChart;
+export default DeviceChart;
