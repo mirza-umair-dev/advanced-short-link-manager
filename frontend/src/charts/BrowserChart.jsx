@@ -17,6 +17,7 @@ const COLORS = [ "#82ca9d",
 const BrowserChart = ({ data }) => {
   return (
     <div className="w-full h-88">
+      <h1 className="text-xl font-bold">Browsers Distribution</h1>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

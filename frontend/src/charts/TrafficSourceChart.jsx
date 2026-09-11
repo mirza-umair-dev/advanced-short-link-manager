@@ -22,6 +22,8 @@ const COLORS = [
 const TrafficSourceChart = ({ data = [] }) => {
   return (
     <div className="w-full h-88">
+<h1 className="text-xl font-bold mb-3">Traffic Sources</h1>
+
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}

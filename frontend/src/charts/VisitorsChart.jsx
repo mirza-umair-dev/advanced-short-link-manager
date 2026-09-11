@@ -12,6 +12,7 @@ const VisitorsChart = ({ trafficData = [] }) => {
 
   return (
     <div className="w-full h-88">
+      <h1 className="text-xl font-bold mb-3">Clicks Over Time</h1>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={data}
