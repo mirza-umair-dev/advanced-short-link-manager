@@ -5,11 +5,11 @@ import Button from "../../components/Button";
 import { instance } from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import Timer from "../../components/Timer";
-import { AuthContext } from "../../context/authContext";
+import { AppContext } from "../../context/ContextProvider";
 
 const VerifyOtp = () => {
 
-  const {getUser} = useContext(AuthContext);
+  const {getUser} = useContext(AppContext);
   const navigate = useNavigate();
   const inputRef = useRef([]);
   const [error, seterror] = useState("");

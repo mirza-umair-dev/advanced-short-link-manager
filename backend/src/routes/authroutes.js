@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/register',validate(registerSchema),registerUser);
 router.post('/signin',authLimiter,validate(signinSchema),signinUser);
-router.post('/logout',logoutUser);
+router.post('/logout',protect,logoutUser);
 router.get('/myprofile',protect,getmyProfile);
 router.post('/sendotp',authLimiter,defend,sendVerifyOtp);
 router.post('/verifyotp',authLimiter,defend,verifyOtp);
