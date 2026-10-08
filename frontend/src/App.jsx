@@ -14,6 +14,7 @@ import Links from './pages/Links'
 import ProtectedRoute from './routes/ProtectedRoute'
 import UserAnalytics from './pages/user/UserAnalytics'
 import UserDashboard from './pages/user/UserDashboard'
+import AdminDashboard from './pages/admin/AdminDashboard'
 
 function App() {
 
@@ -33,7 +34,9 @@ function App() {
         <Route path='/generate-link' element={<GenerateLink />} />
         <Route path='/links' element={<Links />} />
         <Route path='/analytics' element={<UserAnalytics />} />
+        <Route path='/Admin/analytics' element={<AdminDashboard />} />
         <Route path='/layout' element={<UserLayout />} />
+        
       </Routes>
       <ToastContainer />
     </div>
