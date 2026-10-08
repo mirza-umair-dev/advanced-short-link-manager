@@ -59,8 +59,12 @@ const registerUser = async (req, res) => {
     };
     const otp = await sendOtp(user);
 
-    sendEmail(user.email, "Verify Your Email", otpTemplate(otp));
-
+    try {
+      sendEmail(user.email, "Verify Your Email", otpTemplate(otp));
+      
+    } catch (error) {
+      console.error
+    }
     return res.status(201).json({
       success: true,
       name: user.name,
@@ -283,6 +287,7 @@ const resetPassword = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "none",
+      secure:true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
