@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "none",
-      secure:true,
+      secure: true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
     const sendOtp = async (user) => {
@@ -107,7 +107,7 @@ const signinUser = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "none",
-      secure:true,
+      secure: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -270,6 +270,7 @@ const resetPassword = async (req, res) => {
     const acessToken = await generateAccessToken(user.id);
 
     user.refreshToken = refreshToken;
+    user.refreshToken = await bcrypt.hash(refreshToken, 10);
     await user.save();
 
     res.cookie("accessToken", acessToken, {
