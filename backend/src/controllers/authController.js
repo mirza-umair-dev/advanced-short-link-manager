@@ -46,6 +46,7 @@ const registerUser = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "none",
+      secure:true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
     const sendOtp = async (user) => {
@@ -106,6 +107,7 @@ const signinUser = async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       sameSite: "none",
+      secure:true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
