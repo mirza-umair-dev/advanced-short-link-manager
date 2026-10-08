@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -31,21 +31,21 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    const refreshToken =await generateRefreshToken(user.id);
+    const refreshToken = await generateRefreshToken(user.id);
     const acessToken = await generateAccessToken(user.id);
 
     user.refreshToken = await bcrypt.hash(refreshToken, 10);
     await user.save();
     res.cookie("accessToken", acessToken, {
       httpOnly: true,
-       secure:true,
-       sameSite: "none",
+      secure: true,
+      sameSite: "none",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-       sameSite: "none",
+      sameSite: "none",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
     const sendOtp = async (user) => {
@@ -69,7 +69,7 @@ const registerUser = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ success: false, message: "Internal server error"});
+      .json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -98,14 +98,14 @@ const signinUser = async (req, res) => {
     await user.save();
     res.cookie("accessToken", acessToken, {
       httpOnly: true,
-       secure: true,
-       sameSite: "none",
+      secure: true,
+      sameSite: "none",
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-     sameSite: "none",
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(200).json({
@@ -116,9 +116,7 @@ const signinUser = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res
-      .status(400)
-      .json({ success: false, message: "Internal server error"});
+    res.status(400).json({ success: false, message: "Internal server error" });
     return;
   }
 };
@@ -271,9 +269,8 @@ const resetPassword = async (req, res) => {
 
     user.refreshToken = refreshToken;
     await user.save();
-  
 
-     res.cookie("accessToken", acessToken, {
+    res.cookie("accessToken", acessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -282,7 +279,7 @@ const resetPassword = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-       sameSite: "none",
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -308,7 +305,7 @@ const logoutUser = async (req, res) => {
 
     res.clearCookie("accessToken", {});
     res.clearCookie("refreshToken", {});
-    
+
     return res.status(200).json({
       success: true,
       message: "Logged out successfully",
@@ -351,17 +348,16 @@ const refreshAccessToken = async (req, res) => {
     const newAccessToken = await generateAccessToken(user._id);
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-       sameSite: "none",
+      sameSite: "none",
+      secure: true,
       maxAge: 15 * 60 * 1000,
     });
     return res.status(200).json({ success: true, message: "Token refreshed" });
   } catch (error) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-        message: "Refresh token expired, please log in again",
-      });
+    return res.status(401).json({
+      success: false,
+      message: "Refresh token expired, please log in again",
+    });
   }
 };
 

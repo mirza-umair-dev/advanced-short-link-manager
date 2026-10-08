@@ -5,6 +5,10 @@ import { AppContext } from "../context/ContextProvider";
 
 const ProtectedRoute = ({children}) => {
     const {user,loading} = useContext(AppContext);
+    const userInfo = () =>{
+        console.log(user.role);
+    }
+    userInfo();
     if(loading) return (
      <div>
         <div className="animation-spin">
