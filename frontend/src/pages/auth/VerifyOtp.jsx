@@ -8,8 +8,7 @@ import Timer from "../../components/Timer";
 import { AppContext } from "../../context/ContextProvider";
 
 const VerifyOtp = () => {
-
-  const {getUser} = useContext(AppContext);
+  const { getUser } = useContext(AppContext);
   const navigate = useNavigate();
   const inputRef = useRef([]);
   const [error, seterror] = useState("");
@@ -35,14 +34,18 @@ const VerifyOtp = () => {
 
       if (res.data.success) {
         await getUser();
-        navigate("/");
+        if (res.data.user.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/user/dashboard");
+        }
       } else {
         seterror(res.data.message || "Invalid Otp!");
       }
     } catch (error) {
       seterror(
         error.response?.data?.message ||
-          "Something went wrong, please try again.",
+          "Something went wrong, please try again."
       );
     }
   };
@@ -86,8 +89,12 @@ const VerifyOtp = () => {
           <Button />
         </div>
       </form>
-                  <div className="text-sm text-lightext mt-4 font-semibold"><span>Wrong email? </span><Link to='/auth/register' className="text-accent2">Go back</Link></div>
-
+      <div className="text-sm text-lightext mt-4 font-semibold">
+        <span>Wrong email? </span>
+        <Link to="/auth/register" className="text-accent2">
+          Go back
+        </Link>
+      </div>
     </AuthLayout>
   );
 };

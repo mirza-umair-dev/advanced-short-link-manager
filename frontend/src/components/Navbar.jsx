@@ -8,7 +8,7 @@ export const Navbar = () => {
     <div className="sticky top-0 z-50 h-16 bg-surface border-b border-bd flex items-center justify-between px-10">
       <div className="flex items-center gap-2">
         <div className="w-2 h-2 bg-accent rounded-full"></div>
-        <Link to="/">Link Manager</Link>
+        <Link to="/user/dashboard">Link Manager</Link>
       </div>
       <div>
         <div

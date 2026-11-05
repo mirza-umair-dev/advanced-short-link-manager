@@ -9,7 +9,7 @@ const Sidebar = () => {
   {
     id: 1,
     title: "Overview",
-    path: "/",
+    path: "/user/dashboard",
     icon: TbListDetails,
   },
   {
