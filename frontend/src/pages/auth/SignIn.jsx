@@ -32,7 +32,11 @@ const SignIn = () => {
       await signIn(data);
       setsubmitError("");
       await getUser();
-      navigate("/");
+      if (data.user.role === "admin") {
+  navigate("/admin/dashboard");
+} else {
+  navigate("/user/dashboard");
+}
       return;
     } catch (error) {
       setsubmitError(error.response?.data.message);

@@ -15,6 +15,7 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import UserAnalytics from './pages/user/UserAnalytics'
 import UserDashboard from './pages/user/UserDashboard'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import Unauthorized from './pages/Unauthorized'
 
 function App() {
 
@@ -22,8 +23,8 @@ function App() {
     <div>
       <Routes >
 
-        <Route path='/' element={<ProtectedRoute role='user' ><UserDashboard /></ProtectedRoute>}/>
-        <Route path='/' element={<ProtectedRoute role='admin' ><AdminDashboard /></ProtectedRoute>}/>
+        <Route path='/user/dashboard' element={<ProtectedRoute role='user' ><UserDashboard /></ProtectedRoute>}/>
+        <Route path='/admin/dashboard' element={<ProtectedRoute role='admin' ><AdminDashboard /></ProtectedRoute>}/>
         <Route path='/auth/register' element={<SignUp />} />
         <Route path='/auth/login' element={<SignIn />} />
         <Route path='/authlayout' element={<AuthLayout />} />
@@ -37,6 +38,7 @@ function App() {
         <Route path='/analytics' element={<UserAnalytics />} />
         <Route path='/Admin/analytics' element={<AdminDashboard />} />
         <Route path='/layout' element={<UserLayout />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
         
       </Routes>
       <ToastContainer />
