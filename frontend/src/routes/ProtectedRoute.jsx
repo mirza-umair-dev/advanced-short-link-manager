@@ -1,26 +1,30 @@
-import { useContext } from "react"
+import { useContext } from "react";
 import { VscLoadingCompact } from "react-icons/vsc";
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 import { AppContext } from "../context/ContextProvider";
 
-const ProtectedRoute = ({children}) => {
-    const {user,loading} = useContext(AppContext);
-    const userInfo = () =>{
-        console.log(user.role);
-    }
-    userInfo();
-    if(loading) return (
-     <div>
-        <div className="animation-spin">
-            <VscLoadingCompact />
-        </div>
-    </div>);
+const ProtectedRoute = ({ children, role }) => {
+  const { user, loading } = useContext(AppContext);
 
-    if(!user){
-        return <Navigate to="/auth/login" replace />;
-    }
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <VscLoadingCompact className="animate-spin text-3xl" />
+      </div>
+    );
+  }
 
-    return children;
-}
+  // Check authentication
+  if (!user) {
+    return <Navigate to="/auth/login" replace />;
+  }
 
-export default ProtectedRoute
+  // Check authorization
+  if (role && user.role !== role) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  return children;
+};
+
+export default ProtectedRoute;

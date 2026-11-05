@@ -22,7 +22,8 @@ function App() {
     <div>
       <Routes >
 
-        <Route path='/' element={<ProtectedRoute ><UserDashboard /></ProtectedRoute>}/>
+        <Route path='/' element={<ProtectedRoute role='user' ><UserDashboard /></ProtectedRoute>}/>
+        <Route path='/' element={<ProtectedRoute role='admin' ><AdminDashboard /></ProtectedRoute>}/>
         <Route path='/auth/register' element={<SignUp />} />
         <Route path='/auth/login' element={<SignIn />} />
         <Route path='/authlayout' element={<AuthLayout />} />
