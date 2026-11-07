@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { VscLoadingCompact } from "react-icons/vsc";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { AppContext } from "../context/ContextProvider";
 
-const ProtectedRoute = ({ children, role }) => {
+const ProtectedRoute = ({role}) => {
   const { user, loading } = useContext(AppContext);
 
   if (loading) {
@@ -14,17 +14,10 @@ const ProtectedRoute = ({ children, role }) => {
     );
   }
 
-  // Check authentication
-  if (!user) {
-    return <Navigate to="/auth/login" replace />;
-  }
-
-  // Check authorization
-  if (role && user.role !== role) {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
-  return children;
+  if (!user) return <Navigate to="/auth/login" replace />;
+  if (!user.isVerified) return <Navigate to="/auth/verify-otp" replace />;
+  if (role && user.role !== role) return <Navigate to="/unauthorized" replace />;
+  return <Outlet />
 };
 
 export default ProtectedRoute;
