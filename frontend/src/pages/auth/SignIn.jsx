@@ -31,12 +31,15 @@ const SignIn = () => {
     try {
       await signIn(data);
       setsubmitError("");
-      await getUser();
-      if (data.user.role === "admin") {
-  navigate("/admin/dashboard");
-} else {
-  navigate("/user/dashboard");
-}
+      const User = await getUser();
+
+    if (User.role === "admin") {
+      navigate("/admin/dashboard");
+    } else if (User.role === "user") {
+      navigate("/user/dashboard");
+    } else {
+      setsubmitError("User role not found");
+    }
       return;
     } catch (error) {
       setsubmitError(error.response?.data.message);

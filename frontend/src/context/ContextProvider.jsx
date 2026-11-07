@@ -24,6 +24,8 @@ const ContextProvider = ({children}) => {
             name:res.data.user.name,
             email:res.data.user.email
           }));
+
+          return res.data.user;
         } catch (error) {
           localStorage.removeItem("user");
           setuser(null);
