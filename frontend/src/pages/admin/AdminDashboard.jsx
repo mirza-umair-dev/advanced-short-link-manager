@@ -1,9 +1,10 @@
+import UserLayout from "../../layouts/UserLayout"
 
 const AdminDashboard = () => {
     return (
-        <div>
-            <h1>Admin Dashboard</h1>            
-        </div>
+        <UserLayout >
+            <div> Admin Dashboard</div>
+        </UserLayout>
     )
 }
 

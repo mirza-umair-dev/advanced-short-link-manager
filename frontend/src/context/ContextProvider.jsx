@@ -30,6 +30,7 @@ const ContextProvider = ({children}) => {
           localStorage.removeItem("user");
           setuser(null);
           console.log(error);
+          throw error;
         } finally {
           setloading(false);
         }

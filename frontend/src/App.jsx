@@ -37,13 +37,12 @@ function App() {
         {/* User Routes */}
 
         <Route element={<ProtectedRoute role="user" />}>
-          <Route element={<UserLayout />}>
+          
             <Route path="/user/dashboard" element={<UserDashboard />} />
             <Route path="/generate-link" element={<GenerateLink />} />
             <Route path="/links" element={<Links />} />
             <Route path="/analytics" element={<UserAnalytics />} />
-          </Route>
-        </Route>
+                 </Route>
 
         {/* Admin Routes */}
 
