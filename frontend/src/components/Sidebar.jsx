@@ -1,8 +1,7 @@
 import {NavLink } from "react-router-dom";
-import { TbListDetails } from "react-icons/tb";
 import { MdAddLink } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
-import { TbBrandGoogleAnalytics } from "react-icons/tb";
+import { TbBrandGoogleAnalytics,TbListDetails } from "react-icons/tb";
 const Sidebar = () => {
 
     const sidebarLinks = [

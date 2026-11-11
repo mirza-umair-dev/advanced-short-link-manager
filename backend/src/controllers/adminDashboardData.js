@@ -21,7 +21,10 @@ const adminDashboardData = async (req, res) => {
     Link.countDocuments(),
     ClickAnalysis.countDocuments(),
     User.countDocuments(),
-    Link.find().sort({ createdAt: -1 }).limit(10),
+    Link.find()
+  .populate("createdBy", "name email")
+  .sort({ createdAt: -1 })
+  .limit(10),
     ClickAnalysis.aggregate([{
         $group: {
           _id: "$device.browser",
@@ -65,7 +68,7 @@ const adminDashboardData = async (req, res) => {
       operatingSystems,
       browsers,
       referrers,
-      devices
+      devices,User
     });
   } catch (error) {
     return res.status(500).json({
