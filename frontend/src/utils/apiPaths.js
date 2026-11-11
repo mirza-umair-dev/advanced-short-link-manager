@@ -17,6 +17,8 @@ export const API_PATHS = {
     GENERATE: "/api/link/generate-link",
     GET_LINKS:'/api/links',
     GET_DATA: "/api/link/get-data",
+    GET_USERS: "/api/link/get-users",
+
     ADMIN_DASHBOARD: "/admin/dashboard",
     REDIRECT_OR_ANALYTICS: (shortId) => `/${shortId}`,
     DELETE: (shortId) => `/${shortId}`,
