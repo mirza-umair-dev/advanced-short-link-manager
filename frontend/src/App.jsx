@@ -47,7 +47,7 @@ function App() {
 
         <Route element={<ProtectedRoute role="admin" />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="users" element={<AdminUsers />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<Navigate to="/auth/login" replace />} />
