@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search, Users, RefreshCw } from "lucide-react";
-import { instance } from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
+import { getAdminUsers } from "../../api/adminApi";
+import AdminLayout from "../../layouts/AdminLayout";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -14,12 +14,12 @@ const AdminUsers = () => {
       setLoading(true);
       setError("");
 
-      const getUsers = async () => {
-        const res = await instance.get(API_PATHS.LINK.GET_USERS);
-        setUsers(res.data.users || []);
-      };
+const data = await getAdminUsers();
 
-      getUsers();
+      
+      setUsers(data.users || []);
+
+     
     } catch (error) {
       setError(error.response?.data?.message || "Failed to fetch users");
     } finally {
@@ -42,7 +42,8 @@ const AdminUsers = () => {
   });
 
   return (
-    <div className="space-y-6">
+   <AdminLayout >
+     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -183,6 +184,8 @@ const AdminUsers = () => {
         </p>
       )}
     </div>
+
+   </AdminLayout>
   );
 };
 
