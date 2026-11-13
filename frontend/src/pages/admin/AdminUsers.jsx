@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Search, Users, RefreshCw } from "lucide-react";
 import { instance } from "../../utils/axiosInstance";
@@ -16,16 +15,13 @@ const AdminUsers = () => {
       setError("");
 
       const getUsers = async () => {
-        const data = await instance.get(API_PATHS.LINK.GET_USERS);
-        setUsers(data.users || []);
-      }
+        const res = await instance.get(API_PATHS.LINK.GET_USERS);
+        setUsers(res.data.users || []);
+      };
 
       getUsers();
-      
     } catch (error) {
-      setError(
-        error.response?.data?.message || "Failed to fetch users"
-      );
+      setError(error.response?.data?.message || "Failed to fetch users");
     } finally {
       setLoading(false);
     }
@@ -47,7 +43,6 @@ const AdminUsers = () => {
 
   return (
     <div className="space-y-6">
-
       {/* Page Header */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
@@ -103,7 +98,6 @@ const AdminUsers = () => {
 
       {/* Users Table */}
       <div className="overflow-hidden rounded-xl border border-bd bg-surface">
-
         {loading ? (
           <div className="p-10 text-center text-sm text-gray-500">
             Loading users...
@@ -126,7 +120,6 @@ const AdminUsers = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[750px] text-left">
-
               <thead className="border-b border-bd text-xs uppercase text-gray-500">
                 <tr>
                   <th className="px-5 py-4">User</th>
@@ -137,7 +130,6 @@ const AdminUsers = () => {
               </thead>
 
               <tbody className="divide-y divide-bd">
-
                 {filteredUsers.map((user) => (
                   <tr
                     key={user._id}
@@ -145,13 +137,9 @@ const AdminUsers = () => {
                   >
                     {/* User Details */}
                     <td className="px-5 py-4">
-                      <p className="font-medium text-lightext">
-                        {user.name}
-                      </p>
+                      <p className="font-medium text-lightext">{user.name}</p>
 
-                      <p className="mt-1 text-xs text-gray-500">
-                        {user.email}
-                      </p>
+                      <p className="mt-1 text-xs text-gray-500">{user.email}</p>
                     </td>
 
                     {/* Role */}
@@ -182,7 +170,6 @@ const AdminUsers = () => {
                     </td>
                   </tr>
                 ))}
-
               </tbody>
             </table>
           </div>
@@ -195,7 +182,6 @@ const AdminUsers = () => {
           Showing {filteredUsers.length} of {users.length} users
         </p>
       )}
-
     </div>
   );
 };
