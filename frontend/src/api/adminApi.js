@@ -14,3 +14,7 @@ export const getAdminLinks = async () => {
   const res = await instance.get("/api/link/get-links");
   return res.data;
 };
+export const getAdminAnalytics = async () => {
+  const res = await instance.get(API_PATHS.LINK.ADMIN_ANALYTICS);
+  return res.data;
+};

@@ -20,6 +20,7 @@ export const API_PATHS = {
     GET_USERS: "/api/link/get-users",
 
     ADMIN_DASHBOARD: "/admin/dashboard",
+    ADMIN_ANALYTICS: "/admin/analytics",
     REDIRECT_OR_ANALYTICS: (shortId) => `/${shortId}`,
     DELETE: (shortId) => `/${shortId}`,
   },

@@ -7,6 +7,7 @@ import validate from "../middlewares/validator.js";
 import { generateLinkSchema } from "../schemas/linkSchemas.js";
 import getUsers from "../controllers/AdminUsers.js";
 import getAdminLinks from "../controllers/AdminLinks.js";
+import adminAnalyticsData from "../controllers/adminAnalyticsData.js";
 
 
 const router = express.Router();
@@ -17,5 +18,6 @@ router.get('/api/link/get-data',protect,getDashboardData);
 router.get('/api/link/get-users',protect,isAdmin,getUsers);
 router.get('/api/link/get-links',protect,isAdmin,getAdminLinks);
 router.get('/admin/dashboard',protect,isAdmin,adminDashboardData);
+router.get("/admin/analytics",protect,isAdmin,adminAnalyticsData);
 router.get('/:shortId',getLinkandAnlytics);
 export default router;
