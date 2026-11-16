@@ -10,3 +10,7 @@ export const getAdminUsers = async () => {
   const res = await instance.get(API_PATHS.LINK.GET_USERS);
   return res.data;
 };
+export const getAdminLinks = async () => {
+  const res = await instance.get("/api/link/get-links");
+  return res.data;
+};

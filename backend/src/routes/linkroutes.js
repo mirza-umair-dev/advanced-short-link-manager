@@ -11,11 +11,11 @@ import getAdminLinks from "../controllers/AdminLinks.js";
 
 const router = express.Router();
 router.post('/api/link/generate-link',protect,validate(generateLinkSchema),generateLink);
-router.get('/:shortId',getLinkandAnlytics);
 router.delete('/:shortId',protect,deleteLink);
 router.get('/api/links',protect,getLinks);
 router.get('/api/link/get-data',protect,getDashboardData);
 router.get('/api/link/get-users',protect,isAdmin,getUsers);
 router.get('/api/link/get-links',protect,isAdmin,getAdminLinks);
 router.get('/admin/dashboard',protect,isAdmin,adminDashboardData);
+router.get('/:shortId',getLinkandAnlytics);
 export default router;

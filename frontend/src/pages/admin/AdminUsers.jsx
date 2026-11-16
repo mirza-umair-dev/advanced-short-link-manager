@@ -120,7 +120,7 @@ const data = await getAdminUsers();
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[750px] text-left">
+            <table className="w-full min-w-188 text-left">
               <thead className="border-b border-bd text-xs uppercase text-gray-500">
                 <tr>
                   <th className="px-5 py-4">User</th>
