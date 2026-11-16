@@ -20,10 +20,11 @@ const adminAnalyticsData = async (req, res) => {
 
       ClickAnalysis.countDocuments(),
 
-      Link.distinct("_id"),
+      ClickAnalysis.distinct("ipAddress", {
+        ipAddress: { $exists: true, $nin: [null, ""] },
+      }),
 
-      ClickAnalysis.distinct("ipAddress"),
-
+      // Browser statistics
       ClickAnalysis.aggregate([
         {
           $group: {
@@ -34,6 +35,7 @@ const adminAnalyticsData = async (req, res) => {
         { $sort: { total: -1 } },
       ]),
 
+      // Device statistics
       ClickAnalysis.aggregate([
         {
           $group: {
@@ -44,6 +46,7 @@ const adminAnalyticsData = async (req, res) => {
         { $sort: { total: -1 } },
       ]),
 
+      // Operating system statistics
       ClickAnalysis.aggregate([
         {
           $group: {
@@ -54,6 +57,7 @@ const adminAnalyticsData = async (req, res) => {
         { $sort: { total: -1 } },
       ]),
 
+      // Referrer statistics
       ClickAnalysis.aggregate([
         {
           $group: {
@@ -64,6 +68,7 @@ const adminAnalyticsData = async (req, res) => {
         { $sort: { total: -1 } },
       ]),
 
+      // Country statistics
       ClickAnalysis.aggregate([
         {
           $group: {
@@ -74,6 +79,7 @@ const adminAnalyticsData = async (req, res) => {
         { $sort: { total: -1 } },
       ]),
 
+      // Daily traffic statistics
       ClickAnalysis.aggregate([
         {
           $group: {
@@ -83,9 +89,7 @@ const adminAnalyticsData = async (req, res) => {
               day: { $dayOfMonth: "$createdAt" },
             },
             clicks: { $sum: 1 },
-            visitors: {
-              $addToSet: "$ipAddress",
-            },
+            visitors: { $addToSet: "$ipAddress" },
           },
         },
         {
@@ -99,14 +103,13 @@ const adminAnalyticsData = async (req, res) => {
               },
             },
             clicks: 1,
-            visitors: {
-              $size: "$visitors",
-            },
+            visitors: { $size: "$visitors" },
           },
         },
         { $sort: { date: 1 } },
       ]),
 
+      // Top performing links
       Link.find()
         .populate("createdBy", "name email")
         .sort({ clicks: -1 })
