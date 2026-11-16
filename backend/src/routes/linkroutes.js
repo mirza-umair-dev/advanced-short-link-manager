@@ -6,6 +6,7 @@ import adminDashboardData from "../controllers/adminDashboardData.js";
 import validate from "../middlewares/validator.js";
 import { generateLinkSchema } from "../schemas/linkSchemas.js";
 import getUsers from "../controllers/AdminUsers.js";
+import getAdminLinks from "../controllers/AdminLinks.js";
 
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.delete('/:shortId',protect,deleteLink);
 router.get('/api/links',protect,getLinks);
 router.get('/api/link/get-data',protect,getDashboardData);
 router.get('/api/link/get-users',protect,isAdmin,getUsers);
+router.get('/api/link/get-links',protect,isAdmin,getAdminLinks);
 router.get('/admin/dashboard',protect,isAdmin,adminDashboardData);
 export default router;
