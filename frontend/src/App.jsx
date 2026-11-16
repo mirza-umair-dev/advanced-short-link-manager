@@ -15,6 +15,8 @@ import UserDashboard from "./pages/user/UserDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Unauthorized from "./pages/Unauthorized";
 import AdminUsers from "./pages/admin/AdminUsers";
+import AdminLinks from "./pages/admin/AdminLinks";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
         <Route element={<ProtectedRoute role="admin" />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/links" element={<AdminLinks />} />
+          <Route path="/admin/analytics" element={<AdminAnalytics />} />
         </Route>
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<Navigate to="/auth/login" replace />} />
