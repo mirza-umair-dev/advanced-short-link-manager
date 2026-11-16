@@ -25,6 +25,8 @@ const AdminAnalytics = () => {
 
       const res = await getAdminAnalytics();
       setdata(res);
+
+      console.log(res);
     } catch (error) {
       seterror(
         error.response?.data?.message ||
